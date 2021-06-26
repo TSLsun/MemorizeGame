@@ -8,14 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojis = ["🚓", "🚒", "🚕", "🛵", "✈️", "🚀", "🚲", "🚂", "🚑", "🚛", "🚁", "🚢", "🚌", "🚃", "🛶", "⛵️", "🚜", "🛴", "🚝", "🛸", "⛴", "🏍", "🚤", "🚡", "🛥"]
-    @State var emojiCount = 6
+    var vehicles =
+        ["🚓","🚒","🚕","🛵","✈️","🚀","🚲","🚂","🚑",
+         "🚛","🚁","🚢","🚌","🚃","🛶","⛵️","🚜","🛴",
+         "🚝","🛸","⛴","🏍","🚤","🚡","🛥"]
+    var animals =
+        ["🐶","🐱","🐹","🐰","🦊","🐻","🐼","🐨","🐯",
+         "🦁","🐮","🐷","🐵","🐥","🐴","🦦","🦔","🐿",
+         "🐘","🦒","🦘","🦆","🐫","🐊","🦧"]
+    var food =
+        ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍒",
+         "🍑","🍍","🥝","🍅","🥑","🍈","🍆","🥒","🌶",
+         "🥕","🧀","🌽","🍔","🥦","🥐","🍗"]
+    
+    @State var cards: [String] = []
+    @State var cardCount = 16
+    
     var body: some View {
         VStack{
+            Text("Memorize!").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
             ScrollView{
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]) {
-                    ForEach(emojis[0..<emojiCount], id: \.self){ emoji in
-                        CardView(content: emoji)
+                    ForEach(cards, id: \.self){ card in
+                        CardView(content: card)
                             .aspectRatio(2/3, contentMode: .fit)
                     }
                 }
@@ -23,35 +38,65 @@ struct ContentView: View {
             .foregroundColor(.red)
             Spacer()
             HStack {
-                removeButton
+                carButton
                 Spacer()
-//                Text("COUNTS")
-                addButton
+                animalButton
+                Spacer()
+                foodButton
             }
             .font(.largeTitle)
             .padding(.horizontal)
         }
         .padding(.horizontal)
     }
-    
-    var addButton: some View {
+    var carButton: some View {
         Button {
-            if emojiCount < emojis.count {
-                emojiCount += 1
-            }
+            updateCards(theme: "car")
         } label: {
-            Image(systemName: "plus.circle")
+            VStack {
+                Image(systemName: "car")
+                    .aspectRatio(/*@START_MENU_TOKEN@*/CGSize(width: 16, height: 9)/*@END_MENU_TOKEN@*/, contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
+                Text("Vehicles").font(.title3)
+            }
         }
     }
-    var removeButton: some View {
+    var animalButton: some View {
         Button {
-            if emojiCount > 1 {
-                emojiCount -= 1
-            }
+            updateCards(theme: "animal")
         } label: {
-            Image(systemName: "minus.circle")
+            VStack {
+                Image(systemName: "hare")
+                    .aspectRatio(CGSize(width: 16, height: 9), contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
+                Text("Animals").font(.title3)
+            }
         }
     }
+    var foodButton: some View {
+        Button {
+            updateCards(theme: "food")
+        } label: {
+            VStack {
+                Image(systemName: "applelogo")
+                    .aspectRatio(CGSize(width: 16, height: 9), contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
+                Text("Food").font(.title3)
+            }
+        }
+    }
+    func updateCards(theme: String) -> Void{
+        if (theme == "car") {
+            cards = Array(vehicles.shuffled()[0..<cardCount])
+        }
+        else if (theme == "animal") {
+            cards = Array(animals.shuffled()[0..<cardCount])
+        }
+        else if (theme == "food") {
+            cards = Array(food.shuffled()[0..<cardCount])
+        }
+        else {
+            cards = []
+        }
+    }
+
 }
 
 struct CardView: View {
@@ -63,7 +108,7 @@ struct CardView: View {
             let recShape = RoundedRectangle(cornerRadius: 20)
             if isFaceUp {
                 recShape.fill().foregroundColor(.white)
-                recShape.stroke(lineWidth: 3)
+                recShape.stroke(lineWidth: 2.5)
                 Text(content).font(.largeTitle)
             } else {
                 recShape.fill()
