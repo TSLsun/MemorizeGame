@@ -2,6 +2,7 @@
 //  ContentView.swift
 //  MemorizeGame
 //
+//  View
 //  Created by TSL on 2021/6/13.
 //  (Standford CS193p Course)
 
